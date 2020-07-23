@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
+import ModalReact from './components/ModalReact';
 
 import PeriodFilter from './components/PeriodFilter';
 import Resume from './components/Resume';
@@ -13,17 +13,6 @@ import Loading from './tools/Loading';
 
 const currPeriod = moment().lang('pt-br').format('YYYY-MM');
 const currYear = parseInt(moment().format('YYYY'));
-
-const customStyles = {
-	content: {
-		top: '50%',
-		left: '50%',
-		right: 'auto',
-		bottom: 'auto',
-		marginRight: '-50%',
-		transform: 'translate(-50%, -50%)'
-	}
-};
 
 const calcResume = (records) => {
 	const incomeValue = records.filter(({ type }) => type === '+').reduce((acc, item) => {
@@ -107,8 +96,6 @@ export default function App() {
 		handleChangePeriod(null, newPeriod);
 	};
 
-	const openModal = () => {};
-
 	const handleChangeFilter = (event) => {
 		setFilter(event.target.value);
 	};
@@ -131,6 +118,8 @@ export default function App() {
 			<div className="actions">
 				<Button text={'+ Novo Lançamento'} handleClick={openModal} />
 				<InputField placeholder="Filtro" value={filter} handleChange={handleChangeFilter} />
+
+				<ModalReact isOpen={modalIsOpen} onRequestClose={closeModal} edicao={false} />
 			</div>
 
 			{!isLoaded ? (
