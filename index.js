@@ -28,7 +28,7 @@ const { DB_CONNECTION } = process.env;
 
 console.log('Iniciando conexão ao MongoDB...');
 mongoose.connect(
-	DB_CONNECTION,
+	DB_CONNECTION || 'mongodb://localhost:27017/financecontrol',
 	{
 		useNewUrlParser: true,
 		useUnifiedTopology: true

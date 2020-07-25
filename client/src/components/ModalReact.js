@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { currentDate } from '../tools/Dates';
+import { base_url } from '../../config';
 
 const customStyles = {
 	content: {
@@ -54,7 +55,7 @@ export default function ModalDetail({ isOpen, onRequestClose, id, onSubmit }) {
 
 	const afterOpenModal = async () => {
 		if (id) {
-			const tr = await axios.get(`http://localhost:3001/api/transaction/${id}`);
+			const tr = await axios.get(`${base_url}/api/transaction/${id}`);
 			const json = tr.data;
 			setType(json.type);
 			setDescription(json.description);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ModalReact from './components/ModalReact';
 
+import { base_url } from '../config';
+
 import PeriodFilter from './components/PeriodFilter';
 import Resume from './components/Resume';
 import Button from './components/Button';
@@ -56,7 +58,7 @@ export default function App() {
 	const handleSubmit = async (data) => {
 		const { id, type, description, category, value, date } = data;
 		if (!id) {
-			await axios.post('http://localhost:3001/api/transaction', {
+			await axios.post(`${base_url}/api/transaction`, {
 				type,
 				description,
 				category,
@@ -64,7 +66,7 @@ export default function App() {
 				date
 			});
 		} else {
-			await axios.put(`http://localhost:3001/api/transaction/${id}`, {
+			await axios.put(`${base_url}/api/transaction/${id}`, {
 				type,
 				description,
 				category,
@@ -77,13 +79,13 @@ export default function App() {
 	};
 
 	const handleDelete = async (id) => {
-		await axios.delete(`http://localhost:3001/api/transaction/${id}`);
+		await axios.delete(`${base_url}/api/transaction/${id}`);
 		setSubmited(submited ? false : true);
 	};
 
 	const fetchData = async () => {
 		try {
-			const result = await axios.get(`http://localhost:3001/api/transaction?period=${period}&filter=${filter}`);
+			const result = await axios.get(`${base_url}/api/transaction?period=${period}&filter=${filter}`);
 			let json = result.data;
 
 			const { incomeValue, expenseValue } = calcResume(json);
