@@ -1,6 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ModalReact from './ModalReact';
 
 export default function Transaction({ id, day, type, category, description, value, index }) {
+	const [ modalIsOpen, setIsOpen ] = useState(false);
+
+	const openModal = async () => {
+		setIsOpen(true);
+	};
+
+	const closeModal = () => {
+		setIsOpen(false);
+	};
+
+	const handleDelete = (id) => {
+		return id;
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		console.log('submit');
+	};
+
 	return (
 		<li style={{ background: type === '+' ? '#a1f0dc' : '#f1a1a8' }}>
 			<div className="transaction">
@@ -15,10 +35,21 @@ export default function Transaction({ id, day, type, category, description, valu
 					</span>
 				</div>
 				<div className="transaction__actions">
-					<span className="material-icons">edit</span>
-					<span className="material-icons">delete</span>
+					<span className="material-icons" onClick={() => openModal()}>
+						edit
+					</span>
+					<span className="material-icons" onClick={() => handleDelete()}>
+						delete
+					</span>
 				</div>
 			</div>
+			<ModalReact
+				isOpen={modalIsOpen}
+				onRequestClose={closeModal}
+				edicao={true}
+				handleSubmit={handleSubmit}
+				id={id}
+			/>
 		</li>
 	);
 }

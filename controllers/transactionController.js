@@ -48,6 +48,22 @@ const find = async (req, res) => {
 	}
 };
 
+const show = async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		const transaction = await TransactionModel.findOne({ _id: id });
+
+		if (!transaction) {
+			return res.status(400).send({ success: false, message: 'Transação não encontrada.' });
+		}
+
+		return res.send(transaction);
+	} catch (error) {
+		return res.status(500).send({ message: 'Erro ao buscar a transação: ' + error.message });
+	}
+};
+
 const create = async (req, res) => {
 	const { type, description, category, value, date } = req.body;
 
@@ -173,4 +189,4 @@ const removeAll = async (req, res) => {
 	}
 };
 
-module.exports = { find, create, update, remove, removeAll };
+module.exports = { find, show, create, update, remove, removeAll };

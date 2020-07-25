@@ -136,3 +136,22 @@ h3 {
   display: flex;
   flex: 1 1 0%;
 }
+
+
+.modal_type_expense,
+.modal_type_earning {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.modal_type_expense {
+  color: rgb(192, 57, 43);
+}
+
+.modal_type_earning {
+  color: rgb(39, 174, 96);
+}
+
+input[type=radio]:disabled+span {
+  color: rgba(0, 0, 0, .42);
+}

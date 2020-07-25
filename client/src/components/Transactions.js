@@ -1,7 +1,7 @@
 import React from 'react';
 import Transaction from './Transaction';
 
-export default function Transactions({ transactions }) {
+export default function Transactions({ transactions, handleEdition, handleDelete }) {
 	return (
 		<div className="section_transactions">
 			<ul>
@@ -15,6 +15,8 @@ export default function Transactions({ transactions }) {
 							category={category}
 							description={description}
 							value={value}
+							handleEdition={handleEdition}
+							handleDelete={handleDelete}
 						/>
 					);
 				})}

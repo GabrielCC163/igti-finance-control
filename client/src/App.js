@@ -46,28 +46,26 @@ export default function App() {
 
 	useEffect(
 		() => {
-			const fetchData = async () => {
-				try {
-					const result = await axios.get(
-						`http://localhost:3001/api/transaction?period=${period}&filter=${filter}`
-					);
-					let json = result.data;
-
-					const { incomeValue, expenseValue } = calcResume(json);
-					setIncome(incomeValue);
-					setExpense(expenseValue);
-					setTransactions(json);
-					setIsLoaded(true);
-				} catch (err) {
-					console.log(err);
-				}
-			};
-
 			setIsLoaded(false);
 			fetchData();
 		},
 		[ period, filter ]
 	);
+
+	const fetchData = async () => {
+		try {
+			const result = await axios.get(`http://localhost:3001/api/transaction?period=${period}&filter=${filter}`);
+			let json = result.data;
+
+			const { incomeValue, expenseValue } = calcResume(json);
+			setIncome(incomeValue);
+			setExpense(expenseValue);
+			setTransactions(json);
+			setIsLoaded(true);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const handleChangePeriod = (event = null, value = null) => {
 		const selectedPeriod = value ? value : event.target.value;
