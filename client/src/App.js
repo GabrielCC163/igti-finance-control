@@ -35,6 +35,7 @@ export default function App() {
 	const [ expense, setExpense ] = useState(0);
 	const [ filter, setFilter ] = useState('');
 	const [ modalIsOpen, setIsOpen ] = useState(false);
+	const [ submited, setSubmited ] = useState(false);
 
 	const openModal = () => {
 		setIsOpen(true);
@@ -49,8 +50,36 @@ export default function App() {
 			setIsLoaded(false);
 			fetchData();
 		},
-		[ period, filter ]
+		[ period, filter, submited ]
 	);
+
+	const handleSubmit = async (data) => {
+		const { id, type, description, category, value, date } = data;
+		if (!id) {
+			await axios.post('http://localhost:3001/api/transaction', {
+				type,
+				description,
+				category,
+				value: parseFloat(value),
+				date
+			});
+		} else {
+			await axios.put(`http://localhost:3001/api/transaction/${id}`, {
+				type,
+				description,
+				category,
+				value: parseFloat(value),
+				date
+			});
+		}
+		setIsOpen(false);
+		setSubmited(submited ? false : true);
+	};
+
+	const handleDelete = async (id) => {
+		await axios.delete(`http://localhost:3001/api/transaction/${id}`);
+		setSubmited(submited ? false : true);
+	};
 
 	const fetchData = async () => {
 		try {
@@ -117,7 +146,7 @@ export default function App() {
 				<Button text={'+ Novo Lançamento'} handleClick={openModal} />
 				<InputField placeholder="Filtro" value={filter} handleChange={handleChangeFilter} />
 
-				<ModalReact isOpen={modalIsOpen} onRequestClose={closeModal} edicao={false} />
+				<ModalReact isOpen={modalIsOpen} onRequestClose={closeModal} edicao={false} onSubmit={handleSubmit} />
 			</div>
 
 			{!isLoaded ? (
@@ -125,7 +154,7 @@ export default function App() {
 					<Loading type="spinningBubbles" color="#26a69a" />
 				</div>
 			) : (
-				<Transactions transactions={transactions} />
+				<Transactions transactions={transactions} onSubmit={handleSubmit} onDelete={handleDelete} />
 			)}
 		</div>
 	);

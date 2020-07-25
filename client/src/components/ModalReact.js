@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { currentDate } from '../tools/Dates';
 
 const customStyles = {
 	content: {
@@ -23,12 +24,12 @@ const customStyles = {
 	}
 };
 
-export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubmit, id }) {
-	const [ transaction, setTransaction ] = useState([]);
-	const [ type, setType ] = useState('');
+export default function ModalDetail({ isOpen, onRequestClose, id, onSubmit }) {
+	const [ type, setType ] = useState('-');
 	const [ description, setDescription ] = useState('');
 	const [ category, setCategory ] = useState('');
 	const [ value, setValue ] = useState(0);
+	const [ date, setDate ] = useState(currentDate);
 
 	const handleChangeType = (event) => {
 		setType(event.target.value);
@@ -42,14 +43,31 @@ export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubm
 	const handleChangeValue = (event) => {
 		setValue(event.target.value);
 	};
+	const handleChangeDate = (event) => {
+		setDate(event.target.value);
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		onSubmit({ id, type, description, category, value, date });
+	};
 
 	const afterOpenModal = async () => {
-		const tr = await axios.get(`http://localhost:3001/api/transaction/${id}`);
-		const json = tr.data;
-		setType(json.type);
-		setDescription(json.description);
-		setCategory(json.category);
-		setValue(json.value);
+		if (id) {
+			const tr = await axios.get(`http://localhost:3001/api/transaction/${id}`);
+			const json = tr.data;
+			setType(json.type);
+			setDescription(json.description);
+			setCategory(json.category);
+			setValue(json.value);
+			setDate(json.yearMonthDay);
+		} else {
+			setType('-');
+			setDescription('');
+			setCategory('');
+			setValue(0);
+			setDate(currentDate);
+		}
 	};
 
 	return (
@@ -67,7 +85,7 @@ export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubm
 					className="modal_container"
 				>
 					<h3 style={{ marginRight: '10px', fontWeight: 'bold' }}>
-						{edicao ? 'Edição' : 'Inclusão'} de lançamento
+						{id ? 'Edição' : 'Inclusão'} de lançamento
 					</h3>
 					<button className="waves-effect waves-light btn red darken-4" onClick={onRequestClose}>
 						X
@@ -97,7 +115,7 @@ export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubm
 									name="expense-earning"
 									value="-"
 									checked={type === '-' ? true : false}
-									disabled={edicao ? true : false}
+									disabled={id ? true : false}
 									onChange={handleChangeType}
 								/>
 								<span className="modal_type_expense">Despesa</span>
@@ -108,7 +126,7 @@ export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubm
 									name="expense-earning"
 									value="+"
 									checked={type === '+' ? true : false}
-									disabled={edicao ? true : false}
+									disabled={id ? true : false}
 									onChange={handleChangeType}
 								/>
 								<span className="modal_type_earning">Receita</span>
@@ -153,7 +171,14 @@ export default function ModalDetail({ isOpen, onRequestClose, edicao, handleSubm
 									Valor:
 								</label>
 							</div>
-							<input className="browser-default" type="date" placeholder="Data" required />
+							<input
+								className="browser-default"
+								type="date"
+								placeholder="Data"
+								required
+								value={date}
+								onChange={handleChangeDate}
+							/>
 						</div>
 					</div>
 					<input className="waves-effect waves-light btn" type="submit" value="Salvar" disabled={false} />

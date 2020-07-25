@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ModalReact from './ModalReact';
 
-export default function Transaction({ id, day, type, category, description, value, index }) {
+export default function Transaction({ id, day, type, category, description, value, index, onSubmit, onDelete }) {
 	const [ modalIsOpen, setIsOpen ] = useState(false);
 
-	const openModal = async () => {
+	const openModal = () => {
 		setIsOpen(true);
 	};
 
@@ -13,12 +13,7 @@ export default function Transaction({ id, day, type, category, description, valu
 	};
 
 	const handleDelete = (id) => {
-		return id;
-	};
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		console.log('submit');
+		onDelete(id);
 	};
 
 	return (
@@ -38,18 +33,12 @@ export default function Transaction({ id, day, type, category, description, valu
 					<span className="material-icons" onClick={() => openModal()}>
 						edit
 					</span>
-					<span className="material-icons" onClick={() => handleDelete()}>
+					<span className="material-icons" onClick={() => handleDelete(id)}>
 						delete
 					</span>
 				</div>
 			</div>
-			<ModalReact
-				isOpen={modalIsOpen}
-				onRequestClose={closeModal}
-				edicao={true}
-				handleSubmit={handleSubmit}
-				id={id}
-			/>
+			<ModalReact isOpen={modalIsOpen} onRequestClose={closeModal} id={id} onSubmit={onSubmit} />
 		</li>
 	);
 }
