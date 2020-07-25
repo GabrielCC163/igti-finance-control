@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { currentDate } from '../tools/Dates';
-import { base_url } from '../../config';
+import { base_url } from '../config';
 
 const customStyles = {
 	content: {

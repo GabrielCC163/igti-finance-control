@@ -5,4 +5,4 @@
 4. tratar erro que ocorre no console quando filtro não retorna resultados.
 5. retornar meses em pt-br.
 6. refatorar o código.
-7. chamar moment a partir de tools em App.js.
+7. chamar moment apenas a partir de tools em App.js.

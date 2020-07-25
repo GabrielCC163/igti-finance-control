@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ModalReact from './components/ModalReact';
 
-import { base_url } from '../config';
+import { base_url } from './config';
 
 import PeriodFilter from './components/PeriodFilter';
 import Resume from './components/Resume';
@@ -94,6 +94,7 @@ export default function App() {
 			setTransactions(json);
 			setIsLoaded(true);
 		} catch (err) {
+			setIsLoaded(true);
 			console.log(err);
 		}
 	};
